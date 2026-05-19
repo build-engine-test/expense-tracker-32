@@ -20,9 +20,14 @@ describe("client throws on missing DATABASE_URL", () => {
     delete process.env.DATABASE_URL;
     vi.resetModules();
 
+    // The module no longer throws at import time (so the HTTP server can bind
+    // even before env vars are fully available). Instead it throws lazily on
+    // first use via getDb().
+    const mod = await import("./client");
+
     let thrownError: unknown = null;
     try {
-      await import("./client");
+      mod.getDb();
     } catch (err) {
       thrownError = err;
     }
