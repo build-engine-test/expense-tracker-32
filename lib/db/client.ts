@@ -14,6 +14,9 @@ function createDb() {
 
   const queryClient = postgres(databaseUrl, {
     ssl: databaseUrl.includes("localhost") ? false : { rejectUnauthorized: false },
+    max: 5,
+    idle_timeout: 20,
+    connect_timeout: 10,
   });
 
   return drizzle(queryClient, { schema });
