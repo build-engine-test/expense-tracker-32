@@ -11,6 +11,8 @@ if (!databaseUrl) {
   );
 }
 
-const queryClient = postgres(databaseUrl);
+const queryClient = postgres(databaseUrl, {
+  ssl: databaseUrl.includes("localhost") ? false : { rejectUnauthorized: false },
+});
 
 export const db = drizzle(queryClient, { schema });
