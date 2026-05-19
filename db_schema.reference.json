@@ -1,0 +1,60 @@
+{
+  "build_id": "32",
+  "plan_hash_note": "Read-only reference. Translate this into Drizzle code in lib/db/schema.ts.",
+  "tables": [
+    {
+      "name": "expenses",
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigserial",
+          "constraints": [
+            "primary_key",
+            "not_null"
+          ]
+        },
+        {
+          "name": "amount",
+          "type": "numeric(10,2)",
+          "constraints": [
+            "not_null",
+            "check: amount > 0"
+          ]
+        },
+        {
+          "name": "category",
+          "type": "text",
+          "constraints": [
+            "not_null",
+            "check: length(category) > 0"
+          ]
+        },
+        {
+          "name": "note",
+          "type": "text",
+          "constraints": [
+            "nullable"
+          ]
+        },
+        {
+          "name": "created_at",
+          "type": "timestamptz",
+          "constraints": [
+            "not_null"
+          ],
+          "default": "now()"
+        }
+      ],
+      "indexes": [
+        {
+          "name": "expenses_created_at_idx",
+          "columns": [
+            "created_at"
+          ],
+          "order": "desc",
+          "purpose": "table is rendered newest-first; index supports ORDER BY created_at DESC"
+        }
+      ]
+    }
+  ]
+}

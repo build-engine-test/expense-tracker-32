@@ -1,0 +1,28 @@
+# Render service config for Build Engine apps.
+# This file lives in the template so future deploys (after the first one
+# created via Render API) auto-detect the same shape.
+#
+# The Build Engine's Deployer also passes equivalent config via Render's API
+# during initial provisioning, so this file is a redundant safety net rather
+# than the source of truth.
+
+services:
+  - type: web
+    name: build-engine-app
+    runtime: node
+    plan: free
+    branch: main
+    buildCommand: pnpm install && pnpm build
+    startCommand: pnpm start
+    preDeployCommand: pnpm install && pnpm exec drizzle-kit push
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: DATABASE_URL
+        sync: false
+      - key: BETTER_AUTH_SECRET
+        sync: false
+
+databases:
+  - name: build-engine-db
+    plan: free
